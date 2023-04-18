@@ -2,6 +2,9 @@
 #include <ctime>
 #include <cstdlib>
 
+
+//if(entity_a.getSprite().getGlobalBounds().intersects(entity_b.getSprite().getGlobalBounds()))
+
 class Ship 
 {
     private:
@@ -98,6 +101,14 @@ int main()
     enemyShip1.setPosition(enemyShipPosistion1);
     enemyShip1.setOrigin(enemy.width / 2, enemy.height / 2);
 
+    sf::Font font;
+    sf::Text text;
+    text.setFont(font); // font is a sf::Font
+    text.setString("Score:");
+    text.setCharacterSize(24);
+    text.setFillColor(sf::Color::Magenta);
+    text.setPosition(600, 600);
+
     bool moveRocket = false;
     //Main loop
     while (window.isOpen())
@@ -138,6 +149,10 @@ int main()
             rocketBody.setPosition(rocketBodyPosition);
         }
 
+        if (rocketBody.getGlobalBounds().intersects(enemyShip.getGlobalBounds())) {
+            enemyShip.setPosition(500, 500);
+        }
+
         //if rocket goes of screen return it to the player
         if (rocketBodyPosition.y < 0) {
             moveRocket = false;
@@ -152,6 +167,7 @@ int main()
         window.draw(rocketBody);
         window.draw(enemyShip);
         window.draw(enemyShip1);
+        window.draw(text);
         window.display();
 
     }//end of main loop
