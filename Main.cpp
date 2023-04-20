@@ -1,53 +1,12 @@
+#include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <ctime>
 #include <cstdlib>
 
-
-//if(entity_a.getSprite().getGlobalBounds().intersects(entity_b.getSprite().getGlobalBounds()))
-
-class Ship 
-{
-    private:
-        float yVelocity = .3;
-    public:
-        int width;
-        int height;
-        float xVelocity;
-
-        float getyVelocity() {
-            return yVelocity;
-        }
-        void setyVelocity(float yVel) {
-            yVelocity = yVel;
-        }
-        void checkHorizontalBoundaries(sf::Vector2f objectPosition) {
-            if (objectPosition.x < 0 + width / 2 || objectPosition.x > 1280 - width / 2)
-                xVelocity *= -1;
-        }
-        void moveVertical() {
-
-        }
-};
-
-class Player : public Ship 
-{
-    public:
-        void playerMovement(float &xVel) 
-        {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                xVel = -6;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                xVel = 6;
-        }
-        bool playerShoot()
-        {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-                return true;
-            else
-                return false;
-        }
-};
-
+#include "Ship.h"
+#include "Rocket.h"
+#include "Player.h"
 
 int main()
 {
@@ -57,6 +16,13 @@ int main()
         windowHeight = 720
     };
 
+#pragma region Creating Objects
+    Ship enemy;
+    enemy.setyVelocity(0.3);
+    enemy.xVelocity = 3;
+    enemy.width = 30;
+    enemy.height = 60;
+
     Player player;
     //player's size
     player.width = 100;
@@ -64,18 +30,14 @@ int main()
     //player's movement speed
     player.xVelocity = 0;
 
-    Ship rocket;
-    rocket.setyVelocity(-25);
-    rocket.width = 10;
-    rocket.height = 20;
+    //rocket(yVelocity,width, height)
+    Rocket rocket(-25.0, 10, 20);
+#pragma endregion
 
-    Ship enemy;
-    enemy.xVelocity = 3;
-    enemy.width = 30;
-    enemy.height = 60;
-
-    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Its Alive!");
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Galaga");
     window.setFramerateLimit(60);
+
+#pragma region Creating Shapes
 
     //Setting playerShip on screen and formating
     sf::RectangleShape playerShip;
@@ -84,7 +46,7 @@ int main()
     playerShip.setSize(sf::Vector2f(player.width, player.height));
     playerShip.setOrigin(player.width/2, player.height / 2);
 
-    sf::RectangleShape rocketBody(sf::Vector2f(rocket.width, rocket.height));
+    sf::RectangleShape rocketBody(sf::Vector2f(rocket.getWidth(), rocket.getHeight()));
     sf::Vector2f rocketBodyPosition(playerShipPosition.x, playerShipPosition.y);
     rocketBody.setFillColor(sf::Color::Cyan);
     rocketBody.setPosition(rocketBodyPosition);
@@ -100,14 +62,33 @@ int main()
     sf::Vector2f enemyShipPosistion1(600, -50);
     enemyShip1.setPosition(enemyShipPosistion1);
     enemyShip1.setOrigin(enemy.width / 2, enemy.height / 2);
+#pragma endregion
+
+#pragma region Adding Font and Text
 
     sf::Font font;
-    sf::Text text;
-    text.setFont(font); // font is a sf::Font
-    text.setString("Score:");
-    text.setCharacterSize(24);
-    text.setFillColor(sf::Color::Magenta);
-    text.setPosition(600, 600);
+    if (!font.loadFromFile("C:/Users/TKraf/sfmlGame/Open-sans/OpenSans-Bold.ttf"))
+    {
+        std::cout << "Error loading the font file" << std::endl;
+    }
+    int score = 0;
+    std::string stringScore = std::to_string(score);
+    sf::Text scoreText;
+    scoreText.setFont(font); // font is a sf::Font
+    scoreText.setString("Score:");
+    scoreText.setCharacterSize(24);
+    scoreText.setFillColor(sf::Color::Magenta);
+    scoreText.setPosition(10,100);
+
+    sf::Text scoreValueText;
+    scoreValueText.setFont(font); // font is a sf::Font
+    scoreValueText.setString(stringScore);
+    scoreValueText.setCharacterSize(24);
+    scoreValueText.setFillColor(sf::Color::Magenta);
+    scoreValueText.setPosition(85, 100);
+#pragma endregion
+
+#pragma region Main Loop
 
     bool moveRocket = false;
     //Main loop
@@ -151,6 +132,10 @@ int main()
 
         if (rocketBody.getGlobalBounds().intersects(enemyShip.getGlobalBounds())) {
             enemyShip.setPosition(500, 500);
+            score += score;
+            stringScore = std::to_string(score);
+            scoreValueText.setString(stringScore);
+            std::cout << stringScore << std::endl;
         }
 
         //if rocket goes of screen return it to the player
@@ -167,10 +152,12 @@ int main()
         window.draw(rocketBody);
         window.draw(enemyShip);
         window.draw(enemyShip1);
-        window.draw(text);
+        window.draw(scoreText);
+        window.draw(scoreValueText);
         window.display();
 
     }//end of main loop
 
     return 0;
 }
+#pragma endregion
