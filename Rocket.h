@@ -14,6 +14,7 @@ public:
     void setWidth(int wdth);
     int getHeight();
     void setHeight(int hght);
-    void checkVerticalBoundaries(sf::Vector2f objectPosition, sf::Vector2f playerPosition, float& yVel, sf::RectangleShape rocket);
-    void movingRocket(sf::Vector2f rocketPosition, float rocketYVel, sf::RectangleShape rocket, bool shouldRocketMove, float playerXVel);
+    //These are commented out due to linker errors. They were added above main to avoid this error at compile time
+    //sf::Vector2f checkVerticalBoundaries(sf::Vector2f objectPosition, sf::Vector2f playerPosition, float& yVel, sf::RectangleShape rocket);
+    //sf::Vector2f movingRocket(sf::Vector2f rocketPosition, float rocketYVel, sf::RectangleShape rocket, bool shouldRocketMove, float playerXVel);
 };
