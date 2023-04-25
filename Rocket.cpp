@@ -2,14 +2,8 @@
 #include "Rocket.h"
 
 Rocket::Rocket(float yVel, int wdth, int hght) {
-    yVelocity = yVel;
     width = wdth;
     height = hght;
-}
-float Rocket::getyVelocity() {
-    return (yVelocity);
-}
-void Rocket::setyVelocity(float yVel) {
     yVelocity = yVel;
 }
 int Rocket::getWidth() {
@@ -24,3 +18,25 @@ int Rocket::getHeight() {
 void Rocket::setHeight(int hght) {
     height = hght;
 }
+/*
+void checkVerticalBoundaries(sf::Vector2f rocketPosition, sf::Vector2f playerPosition, float yVel, sf::RectangleShape rocket) {
+    if (rocketPosition.y > 720) {
+        yVel = 0;
+        rocketPosition = playerPosition;
+        rocket.setPosition(rocketPosition);
+    }
+    //return rocketPosition;
+}
+void movingRocket(sf::Vector2f rocketPosition, float rocketYVel, sf::RectangleShape rocket, bool shouldRocketMove, float playerXVel) {
+    if (shouldRocketMove) {
+        rocketPosition.y += rocketYVel;
+        rocket.setPosition(rocketPosition);
+        //return rocketPosition;
+    }
+    else {
+        rocketPosition.x += playerXVel;
+        rocket.setPosition(rocketPosition);
+        //return rocketPosition;
+    }
+}
+    */

@@ -14,5 +14,5 @@ public:
     float getyVelocity();
     void setyVelocity(float yVel);
     void checkHorizontalBoundaries(sf::Vector2f objectPosition);
-    void moveVertical();
+    void moveShip(float yVel, float& xVel);
 };
